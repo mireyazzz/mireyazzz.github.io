@@ -6,20 +6,22 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>hexo Quick start | Hexo</title>
+  <title>留下没有基础的眼泪-synchronized | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="1. 安装hexo1sudo npm install -g hexo 目录结构  node_modules：是依赖包 public：存放的是生成的页面 scaffolds：命令生成文章等的模板 source：用命令创建的各种文章 themes：主题 _config.yml：整个博客的配置 db.json：source解析所得到的 package.json：项目所需模块项目的配置信息  2. 初始化">
-<meta name="keywords" content="hexo">
+  <meta name="description" content="杨晓峰老师《java核心技术36讲》15，16课&amp;amp;郑雨迪老师《深入拆解java虚拟机》14课学习总结 参考文章：https://www.cnblogs.com/charlesblc/p/5994162.html synchronized的实现原理在java程序中，我们利用synchronized关键字来对程序进行加锁，它可以申明一个synchronized代码块，也可以标记静态方法或者实例">
+<meta name="keywords" content="synchronized,同步,锁">
 <meta property="og:type" content="article">
-<meta property="og:title" content="hexo Quick start">
-<meta property="og:url" content="http://yoursite.com/2018/09/27/hexo-Quick-start/index.html">
+<meta property="og:title" content="留下没有基础的眼泪-synchronized">
+<meta property="og:url" content="http://yoursite.com/2018/10/07/留下没有基础的眼泪-synchronized/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="1. 安装hexo1sudo npm install -g hexo 目录结构  node_modules：是依赖包 public：存放的是生成的页面 scaffolds：命令生成文章等的模板 source：用命令创建的各种文章 themes：主题 _config.yml：整个博客的配置 db.json：source解析所得到的 package.json：项目所需模块项目的配置信息  2. 初始化">
+<meta property="og:description" content="杨晓峰老师《java核心技术36讲》15，16课&amp;amp;郑雨迪老师《深入拆解java虚拟机》14课学习总结 参考文章：https://www.cnblogs.com/charlesblc/p/5994162.html synchronized的实现原理在java程序中，我们利用synchronized关键字来对程序进行加锁，它可以申明一个synchronized代码块，也可以标记静态方法或者实例">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-09-27T07:41:55.344Z">
+<meta property="og:image" content="https://wiki.openjdk.java.net/download/attachments/11829266/Synchronization.gif?version=4&modificationDate=1208918680000&api=v2">
+<meta property="og:updated_time" content="2018-10-07T06:30:04.642Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="hexo Quick start">
-<meta name="twitter:description" content="1. 安装hexo1sudo npm install -g hexo 目录结构  node_modules：是依赖包 public：存放的是生成的页面 scaffolds：命令生成文章等的模板 source：用命令创建的各种文章 themes：主题 _config.yml：整个博客的配置 db.json：source解析所得到的 package.json：项目所需模块项目的配置信息  2. 初始化">
+<meta name="twitter:title" content="留下没有基础的眼泪-synchronized">
+<meta name="twitter:description" content="杨晓峰老师《java核心技术36讲》15，16课&amp;amp;郑雨迪老师《深入拆解java虚拟机》14课学习总结 参考文章：https://www.cnblogs.com/charlesblc/p/5994162.html synchronized的实现原理在java程序中，我们利用synchronized关键字来对程序进行加锁，它可以申明一个synchronized代码块，也可以标记静态方法或者实例">
+<meta name="twitter:image" content="https://wiki.openjdk.java.net/download/attachments/11829266/Synchronization.gif?version=4&modificationDate=1208918680000&api=v2">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -155,20 +157,20 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-hexo-Quick-start" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-留下没有基础的眼泪-synchronized" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      hexo Quick start
+      留下没有基础的眼泪-synchronized
     </h1>
   
 
         
-        <a href="/2018/09/27/hexo-Quick-start/" class="archive-article-date">
-  	<time datetime="2018-09-27T07:17:48.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-27</time>
+        <a href="/2018/10/07/留下没有基础的眼泪-synchronized/" class="archive-article-date">
+  	<time datetime="2018-10-07T06:28:48.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-07</time>
 </a>
         
 
@@ -176,44 +178,82 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="1-安装hexo"><a href="#1-安装hexo" class="headerlink" title="1. 安装hexo"></a>1. 安装hexo</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo npm install -g hexo</span><br></pre></td></tr></table></figure>
-<p>目录结构</p>
+        <p>杨晓峰老师《java核心技术36讲》15，16课&amp;郑雨迪老师《深入拆解java虚拟机》14课学习总结</p>
+<p>参考文章：<a href="https://www.cnblogs.com/charlesblc/p/5994162.html" target="_blank" rel="noopener">https://www.cnblogs.com/charlesblc/p/5994162.html</a></p>
+<h2 id="synchronized的实现原理"><a href="#synchronized的实现原理" class="headerlink" title="synchronized的实现原理"></a>synchronized的实现原理</h2><p>在java程序中，我们利用synchronized关键字来对程序进行加锁，它可以申明一个synchronized代码块，也可以标记静态方法或者实例方法。</p>
+<h3 id="1-声明synchronized-代码块"><a href="#1-声明synchronized-代码块" class="headerlink" title="1.声明synchronized 代码块"></a>1.声明synchronized 代码块</h3><p>是由一对 monitorenter/monitorexit指令实现的，monitor 对象是同步的基本实现单元。</p>
+<p>例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public void foo(Object lock) &#123;</span><br><span class="line">  synchronized (lock) &#123;</span><br><span class="line">    lock.hashCode();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这段代码编译的字节码会包括一个monitorenter指令和多个monitorexit，jvm需要确保所获得的锁在正常/异常执行路径都能够被解锁。</p>
+<p>执行monitorenter时</p>
 <ul>
-<li>node_modules：是依赖包</li>
-<li>public：存放的是生成的页面</li>
-<li>scaffolds：命令生成文章等的模板</li>
-<li>source：用命令创建的各种文章</li>
-<li>themes：主题</li>
-<li>_config.yml：整个博客的配置</li>
-<li>db.json：source解析所得到的</li>
-<li>package.json：项目所需模块项目的配置信息</li>
+<li>如果目标锁的计数器为0，说明他没有被其他线程所持有，jvm会将锁对象的持有线程设置为当前线程，并将计数器加1.</li>
+<li>如果目标锁的计数器不为0，如果锁对象的持有线程是当前线程，jvm可以将计数器加1，否则等待，直到持有线程释放该锁。</li>
 </ul>
-<h2 id="2-初始化"><a href="#2-初始化" class="headerlink" title="2. 初始化"></a>2. 初始化</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo init</span><br><span class="line">hexo install</span><br><span class="line">hexo s</span><br></pre></td></tr></table></figure>
-<p>此时打开<a href="http://localhost:4000可以看到静态页" target="_blank" rel="noopener">http://localhost:4000可以看到静态页</a></p>
-<h2 id="3-关联github"><a href="#3-关联github" class="headerlink" title="3.  关联github"></a>3.  关联github</h2><h4 id="gitbash连接"><a href="#gitbash连接" class="headerlink" title="gitbash连接"></a>gitbash连接</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name &quot;用户名&quot;</span><br><span class="line">git config --global user.email &quot;邮箱&quot;</span><br><span class="line">ssh-keygen -t rsa -C&quot;邮箱&quot;</span><br></pre></td></tr></table></figure>
-<p>找到ssh key<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd ~/.ssh</span><br><span class="line">cat id_rsa.pub</span><br></pre></td></tr></table></figure></p>
-<p>将这段配置到github上后，检查一下是否配置成功<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@github.com</span><br></pre></td></tr></table></figure></p>
-<p>创建项目名为：用户名.github.io<br>在/blog下配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim _config.yml</span><br></pre></td></tr></table></figure></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: https://github.com/用户名/用户名.github.io</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
-<p>退出保存<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo g</span><br><span class="line">hexo d</span><br></pre></td></tr></table></figure></p>
-<p>hexo d时提示ERROR Deployer not found:git</p>
-<p>解决方法：<br>npm install –save hexo-deployer-git</p>
-<h2 id="4-配置主题"><a href="#4-配置主题" class="headerlink" title="4. 配置主题"></a>4. 配置主题</h2><p>这边使用了yilia</p>
-<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/litten/hexo-theme-yilia.git themes/yilia</span><br></pre></td></tr></table></figure>
-<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><ul>
-<li><p>修改hexo根目录下的 _config.yml<code>theme: yilia</code></p>
-</li>
-<li><p>配置yilia文件下的_config.yml</p>
-</li>
+<p>执行monitorexit时，jvm将锁对象的计数器减1，如果计数器为0，代表锁已经被释放。</p>
+<h3 id="2-用synchronized标记方法"><a href="#2-用synchronized标记方法" class="headerlink" title="2.用synchronized标记方法"></a>2.用synchronized标记方法</h3><p>例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public synchronized void foo(Object lock) &#123;</span><br><span class="line">  lock.hashCode();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这段代码编译的字节码中方法的访问有ACC_SYNCHRONIZED。但是没有monitorenter或者monitorexit。</p>
+<p>因为方法级别的同步是隐式的，它实现在方法调用和返回操作之中。虚拟机可以从方法常量池中的方法表结构（method_info structure）中的 ACC_SYNCHRONIZED 访问标志区分一个方法是否是同步方法。</p>
+<p>当调用方法时，调用指令将会检查方法的 ACC_SYNCHRONIZED 访问标志是否设置，如果设置了，执行线程先持有同步锁，然后执行方法，最后在方法完成时释放锁。</p>
+<h2 id="锁的升级降级"><a href="#锁的升级降级" class="headerlink" title="锁的升级降级"></a>锁的升级降级</h2><ul>
+<li>jvm 提供三种不同的Monitor实现，即偏斜锁，轻量锁，重量锁。</li>
+<li>当jvm检测到不同的竞争状况时，会自动切换到适合的锁实现，这就是锁的升级降级。</li>
+<li>当没有竞争出现时，默认使用偏斜锁。</li>
 </ul>
-<p>配置头像时出现了头像不能展示的问题</p>
-<p>解决方法：</p>
+<p><img src="https://wiki.openjdk.java.net/download/attachments/11829266/Synchronization.gif?version=4&amp;modificationDate=1208918680000&amp;api=v2" alt="image"><br>其中，00代表轻量锁，01代表无锁（或者偏向锁），10代表重量锁，11则根垃圾回收算法的标记有关。</p>
+<p>在所有的锁都启用的情况下线程进入临界区时会先去获取偏向锁，如果已经存在偏向锁了，则会尝试获取轻量级锁，如果以上两种都失败，则启用自旋锁，如果自旋也没有获取到锁，则使用重量级锁，没有获取到锁的线程阻塞挂起，直到持有锁的线程执行完同步块唤醒他们；</p>
+<h3 id="重量锁"><a href="#重量锁" class="headerlink" title="重量锁"></a>重量锁</h3><p>重量锁会阻碍加锁失败的线程，并在目标锁被释放时唤醒这些线程。<br>为了避免昂贵的线程阻塞，唤醒的过程，jvm会在线程进入阻塞状态之前，以及被唤醒后竞争不到锁的情况下，进入自旋状态，在处理器上空跑并轮询锁是否释放，如果此时锁恰好被释放了，那线程便无须进入阻塞状态，直接获得这把锁。</p>
+<h3 id="轻量锁"><a href="#轻量锁" class="headerlink" title="轻量锁"></a>轻量锁</h3><p>轻量级锁是相对于重量级锁而言在获取锁和释放锁时更加高效，但轻量级锁并不能代替重量级锁。轻量级锁适用的场景是在线程交替获取某个锁执行同步代码块的场景，如果出现多个进程同时竞争同一个锁时，轻量级锁会膨胀成重量级锁。</p>
+<p>轻量锁采用CAS操作，把锁对象的标记字段替换成一个指针，指向当前线程栈上的一块空间，存储这锁对象原本的标记字段。</p>
+<h3 id="偏向锁"><a href="#偏向锁" class="headerlink" title="偏向锁"></a>偏向锁</h3><p> 偏向锁只会在第一次请求是采用CAS操作，在锁对象的标记字段中记录下当前线程的地址，在之后的运行过程中，持有该偏向锁的线程的加锁操作将直接返回。</p>
+<table>
+<thead>
+<tr>
+<th>锁</th>
+<th>适用场景</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>重量锁</td>
+<td>多个线程同时进入临界区</td>
+<td>线程竞争不使用自旋不消耗cpu，吞吐量高</td>
+<td>线程阻塞，响应缓慢</td>
+</tr>
+<tr>
+<td>轻量锁</td>
+<td>多个线程交替进入临界区</td>
+<td>竞争的线程不会阻塞，响应速度快</td>
+<td>如果始终得不到锁竞争的线程使用自旋会消耗cpu</td>
+</tr>
+<tr>
+<td>偏向锁</td>
+<td>仅有一个线程进入临界区</td>
+<td>加锁和解锁不需要额外的消耗</td>
+<td>如果线程间存在锁竞争，会带来额外的锁撤销的消耗</td>
+</tr>
+</tbody>
+</table>
+<h2 id="ReentrantLock和synchronized的区别"><a href="#ReentrantLock和synchronized的区别" class="headerlink" title="ReentrantLock和synchronized的区别"></a>ReentrantLock和synchronized的区别</h2><p>1.用法比较</p>
 <ul>
-<li><p>layout/_partial/left-col.ejs将第六行修改成如下形式：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;img src=&quot;&lt;%=theme.root%&gt;&lt;%=theme.avatar%&gt;&quot; class=&quot;js-avatar&quot;&gt;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>将头像文件放在theme/source/img目录下，修改yilia的配置文件<br><code>avatar: img/myicon.jpg</code></p>
-</li>
+<li>Lock使用起来比较灵活，但是必须有释放锁的配合动作</li>
+<li>Lock必须手动获取与释放锁，而synchronized不需要手动释放和开启锁</li>
+<li>Lock只适用于代码块锁，而synchronized可用于修饰方法、代码块等</li>
+</ul>
+<p>2.特性比较</p>
+<p>ReentrantLock的优势体现在：</p>
+<ul>
+<li>具备尝试非阻塞地获取锁的特性：当前线程尝试获取锁，如果这一时刻锁没有被其他线程获取到，则成功获取并持有锁</li>
+<li>能被中断地获取锁的特性：与synchronized不同，获取到锁的线程能够响应中断，当获取到锁的线程被中断时，中断异常将会被抛出，同时锁会被释放</li>
+<li>超时获取锁的特性：在指定的时间范围内获取锁；如果截止时间到了仍然无法获取锁，则返回</li>
+</ul>
+<p>3.注意事项</p>
+<p>在使用ReentrantLock类的时，一定要注意三点：</p>
+<ul>
+<li>在finally中释放锁，目的是保证在获取锁之后，最终能够被释放</li>
+<li>不要将获取锁的过程写在try块内，因为如果在获取锁时发生了异常，异常抛出的同时，也会导致锁无故被释放。</li>
+<li>ReentrantLock提供了一个newCondition的方法，以便用户在同一锁的情况下可以根据不同的情况执行等待或唤醒的动作。</li>
 </ul>
 
       
@@ -249,7 +289,15 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">hexo</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">synchronized</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">同步</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">锁</a>
         		</li>
       		
 		</ul>
@@ -305,7 +353,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2018/09/27/hexo-Quick-start/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2018/10/07/留下没有基础的眼泪-synchronized/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -319,18 +367,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2018/09/27/leetcode刷题-ListNode/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          leetcode刷题-链表
-        
-      </div>
-    </a>
   
-  
-    <a href="/2018/09/27/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Hello World</div>
+    <a href="/2018/10/06/留下没有基础的眼泪-链表/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">留下没有基础的眼泪-链表</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -357,7 +396,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-安装hexo"><span class="toc-number">1.</span> <span class="toc-text">1. 安装hexo</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-初始化"><span class="toc-number">2.</span> <span class="toc-text">2. 初始化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-关联github"><span class="toc-number">3.</span> <span class="toc-text">3.  关联github</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#gitbash连接"><span class="toc-number">3.0.1.</span> <span class="toc-text">gitbash连接</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-配置主题"><span class="toc-number">4.</span> <span class="toc-text">4. 配置主题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#安装"><span class="toc-number">4.1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置"><span class="toc-number">4.2.</span> <span class="toc-text">配置</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#synchronized的实现原理"><span class="toc-number">1.</span> <span class="toc-text">synchronized的实现原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-声明synchronized-代码块"><span class="toc-number">1.1.</span> <span class="toc-text">1.声明synchronized 代码块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-用synchronized标记方法"><span class="toc-number">1.2.</span> <span class="toc-text">2.用synchronized标记方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#锁的升级降级"><span class="toc-number">2.</span> <span class="toc-text">锁的升级降级</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#重量锁"><span class="toc-number">2.1.</span> <span class="toc-text">重量锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#轻量锁"><span class="toc-number">2.2.</span> <span class="toc-text">轻量锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#偏向锁"><span class="toc-number">2.3.</span> <span class="toc-text">偏向锁</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ReentrantLock和synchronized的区别"><span class="toc-number">3.</span> <span class="toc-text">ReentrantLock和synchronized的区别</span></a></li></ol>
                     </div>
                 </span>
             </div>
