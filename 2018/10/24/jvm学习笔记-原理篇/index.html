@@ -6,15 +6,24 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Tag: 数组 | Hexo</title>
+  <title>jvm学习笔记-原理篇 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/tags/数组/index.html">
+  <meta name="description" content="目录：  一、JVM内存模型和结构  二、Java 类加载机制  三、方法执行过程  四、java大版本新特性 ##一、jvm内存结构 ###heap堆堆是内存管理里最大的一块，是线程共享的数据。在jvm启动时创建。目的是存放对象实例。java的引用传递依靠的就是堆内存，例如引用类型的变量是在栈区保存一个指向堆区的指针，通过这个指针可以找到实例在堆区对应的对象。同一块堆内存可以被不同的栈内存所指向">
+<meta name="keywords" content="jvm,类加载">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jvm学习笔记-原理篇">
+<meta property="og:url" content="http://yoursite.com/2018/10/24/jvm学习笔记-原理篇/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="目录：  一、JVM内存模型和结构  二、Java 类加载机制  三、方法执行过程  四、java大版本新特性 ##一、jvm内存结构 ###heap堆堆是内存管理里最大的一块，是线程共享的数据。在jvm启动时创建。目的是存放对象实例。java的引用传递依靠的就是堆内存，例如引用类型的变量是在栈区保存一个指向堆区的指针，通过这个指针可以找到实例在堆区对应的对象。同一块堆内存可以被不同的栈内存所指向">
 <meta property="og:locale" content="default">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1bhRnRFXXXXa2XVXXXXXXXXXX-510-401.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1EVhqRFXXXXcFXFXXXXXXXXXX-583-183.png">
+<meta property="og:image" content="https://images0.cnblogs.com/blog/610052/201409/131449151064177.png">
+<meta property="og:updated_time" content="2018-10-29T07:23:28.482Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="jvm学习笔记-原理篇">
+<meta name="twitter:description" content="目录：  一、JVM内存模型和结构  二、Java 类加载机制  三、方法执行过程  四、java大版本新特性 ##一、jvm内存结构 ###heap堆堆是内存管理里最大的一块，是线程共享的数据。在jvm启动时创建。目的是存放对象实例。java的引用传递依靠的就是堆内存，例如引用类型的变量是在栈区保存一个指向堆区的指针，通过这个指针可以找到实例在堆区对应的对象。同一块堆内存可以被不同的栈内存所指向">
+<meta name="twitter:image" content="https://img.alicdn.com/tfs/TB1bhRnRFXXXXa2XVXXXXXXXXXX-510-401.png">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -150,64 +159,224 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-jvm学习笔记-原理篇" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/09/27/leetcode刷题-数组/" class="archive-article-date">
-  	<time datetime="2018-09-27T12:20:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-27</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/09/27/leetcode刷题-数组/">leetcode刷题-数组</a>
+    <h1 class="article-title" itemprop="name">
+      jvm学习笔记-原理篇
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2018/10/24/jvm学习笔记-原理篇/" class="archive-article-date">
+  	<time datetime="2018-10-24T07:28:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-24</time>
+</a>
+        
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>目录：<br>  一、JVM内存模型和结构<br>  二、Java 类加载机制<br>  三、方法执行过程<br>  四、java大版本新特性</p>
+<p>##一、jvm内存结构<br><img src="https://img.alicdn.com/tfs/TB1bhRnRFXXXXa2XVXXXXXXXXXX-510-401.png" alt=""></p>
+<p>###heap堆<br>堆是内存管理里最大的一块，是线程共享的数据。在jvm启动时创建。<br>目的是存放对象实例。java的引用传递依靠的就是堆内存，例如引用类型的变量是在栈区保存一个指向堆区的指针，通过这个指针可以找到实例在堆区对应的对象。同一块堆内存可以被不同的栈内存所指向。<br>堆内部细分为新生代和老年代，新生代又分为Eden，From survior，TO survior，hotspot虚拟机中默认比例是8:1:1<br><img src="https://img.alicdn.com/tfs/TB1EVhqRFXXXXcFXFXXXXXXXXXX-583-183.png" alt=""></p>
+<p>###方法区<br>方法区又称为永久区，线程共享，目的是存放已被jvm加载的类信息，常量，静态变量，即时编译器编译后的代码等数据，垃圾回收在这个区域比较少，主要目的是对常量池的回收和类的卸载。</p>
+<p>####运行时常量池<br>运行时常量池是方法区的一部分，用于存储编译器产生的字面量和符号引用，这类内容类加载后被存储到方法区的rcp。</p>
+<p>###JVM Stack<br>JVM栈是线程私有的，它的生命周期与线程相同。JVM栈描述的是java方法执行的内存模型，每个方法在执行的同时都会创建一个栈帧，用于存储局部变量表、操作数栈、动态链接、方法出口等信息。每个方法从调用直至执行完成的过程，就对应着一个栈帧在虚拟机栈中入栈到出栈的过程。<br>局部变量表中存放了编译期可知的各种基本数据类型（boolean、byte、char、short、int、float、long、double）、对象的引用类型（reference类型，不等同于对象本身，根据不同的虚拟机实现，可能是一个指向对象起始地址的引用指针，也可能是一个代表对象的句柄或者其他与对象相关的位置）。局部变量表中需要的内存空间在编译期间完成分配，当进入一个方法时，这个方法需要在帧中分配多大的局部变量空间是完全确定的，在方法运行期间不会改变局部变量表的大小。<br><img src="https://images0.cnblogs.com/blog/610052/201409/131449151064177.png" alt=""></p>
+<p>###本地方法栈<br>与VM Strack相似，VM Strack为JVM提供执行JAVA方法的服务，Native Method Stack则为JVM提供使用native 方法的服务。</p>
+<p>###程序计数器<br>程序计数器是一块较小的内存区域，作用可以看做是当前线程执行的字节码的位置指示器。分支、循环、跳转、异常处理和线程恢复等基础功能都需要依赖这个计算器来完成</p>
+<p>##二、Java 类加载机制<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">加载</span><br><span class="line">⬇️</span><br><span class="line">验证➡️准备➡️解析</span><br><span class="line">           ⬇️</span><br><span class="line">           初始化</span><br><span class="line">           ⬇️</span><br><span class="line">           使用</span><br><span class="line">           ⬇️</span><br><span class="line">           卸载</span><br></pre></td></tr></table></figure></p>
+<p>类加载的过程包括了加载、验证、准备、解析、初始化五个阶段。</p>
+<ol>
+<li>隐式加载<br>程序在运行过程中当碰到通过new 等方式生成对象时，隐式调用类装载器加载对应的类到jvm中</li>
+<li>显式加载<br>通过class.forname()等方法，显式加载需要的类</li>
+</ol>
+<p>1、通过一个类的全限定名来获取其定义的二进制字节流。<br>2、将这个字节流所代表的静态存储结构转化为方法区的运行时数据结构。<br>3、在Java堆中生成一个代表这个类的java.lang.Class对象，作为对方法区中这些数据的访问入口。</p>
+<h3 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h3><p>jvm通过类加载器把数据加载到内存</p>
+<p>####1.启动类加载器Bootstrp loader<br>Bootstrp加载器是用C++语言写的，它是在Java虚拟机启动后初始化的，它主要负责加载%JAVA_HOME%/jre/lib,-Xbootclasspath参数指定的路径以及%JAVA_HOME%/jre/classes中的类。</p>
+<p>####2.扩展类加载器ExtClassLoader<br>Bootstrp loader加载ExtClassLoader,并且将ExtClassLoader的父加载器设置为Bootstrp loader。<br>主要加载%JAVA_HOME%/jre/lib/ext，此路径下的所有classes目录以及java.ext.dirs系统变量指定的路径中类库。</p>
+<p>####3.应用程序类加载器AppClassLoader<br>Bootstrp loader加载完ExtClassLoader后，就会加载AppClassLoader,并且将AppClassLoader的父加载器指定为 ExtClassLoader。<br>ClassLoader中有个getSystemClassLoader方法,此方法返回的正是AppclassLoader.AppClassLoader主要负责加载classpath所指定的位置的类或者是jar文档，它也是Java程序默认的类加载器。</p>
+<p>####示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public class JVMTest &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        ClassLoader  loader = JVMTest.class.getClassLoader();</span><br><span class="line">        System.out.println(loader);</span><br><span class="line">        ClassLoader loderp =loader.getParent();</span><br><span class="line">        System.out.println(loderp);</span><br><span class="line">        ClassLoader loaderpp =loderp.getParent();</span><br><span class="line">        System.out.println(loaderpp);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>运行结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sun.misc.Launcher$AppClassLoader@135fbaa4</span><br><span class="line">sun.misc.Launcher$ExtClassLoader@2503dbd3</span><br><span class="line">null</span><br></pre></td></tr></table></figure></p>
+<p>由于Bootstrap Loader是用C++语言写的，并不存在类实体，所以打印为null。</p>
+<p>####类加载模型：双亲委派<br>这个模型要求除了Bootstrap ClassLoader外，其余的类加载器都要有自己的父加载器。子加载器通过组合来复用父加载器的代码，而不是使用继承。在某个类加载器加载class文件时，它首先委托父加载器去加载这个类，依次传递到顶层类加载器(Bootstrap)。如果顶层加载不了（它的搜索范围中找不到此类），子加载器才会尝试加载这个类。</p>
+<p>#####双亲委派模型解决的问题：</p>
+<ul>
+<li>每一个类都只会被加载一次，避免了重复加载</li>
+<li>每一个类都会被尽可能的加载（从引导类加载器往下，每个加载器都可能会根据优先次序尝试加载它）</li>
+<li>有效避免了某些恶意类的加载（比如自定义了Java。lang.Object类，一般而言在双亲委派模型下会加载系统的Object类而不是自定义的Object类）</li>
+</ul>
+<p>##三、方法执行过程</p>
+<p>##四、java大版本新特性</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>午饭鸡腿+1<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">leetcode</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">jvm</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">数组</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">类加载</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2018/10/24/jvm学习笔记-原理篇/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2018/10/24/java学习笔记-多线程/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          java学习笔记-多线程
+        
+      </div>
+    </a>
   
   
-    </div></section>
+    <a href="/2018/10/12/数据结构-栈/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">数据结构-栈</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#类加载器"><span class="toc-number">1.</span> <span class="toc-text">类加载器</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
+        </div>
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -235,9 +404,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,
