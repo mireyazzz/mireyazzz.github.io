@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.5.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.5.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.5.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.5.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="目录：   一、堆内存空间策略   二、GC算法及常见垃圾回收器   三、案例  ParNew时间过长 CMS的时长过长 连续fullgc  一、jvm调优-堆内存jvm调优的关键在于堆内存空间的控制策略。 新生代伊甸园区：新生的小对象，每当使用关键字new的时候默认在此空间进行对象创建。如果创建的对象过多，也可能造成伊甸园区的内存空间占满，此时就会发生晋级操作（多次minorgc执行还保留的对象">
+<meta name="keywords" content="jvm,GC">
+<meta property="og:type" content="website">
+<meta property="og:title" content="jvm学习笔记-GC调优">
+<meta property="og:url" content="http://yoursite.com/jvm学习笔记-GC调优.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="目录：   一、堆内存空间策略   二、GC算法及常见垃圾回收器   三、案例  ParNew时间过长 CMS的时长过长 连续fullgc  一、jvm调优-堆内存jvm调优的关键在于堆内存空间的控制策略。 新生代伊甸园区：新生的小对象，每当使用关键字new的时候默认在此空间进行对象创建。如果创建的对象过多，也可能造成伊甸园区的内存空间占满，此时就会发生晋级操作（多次minorgc执行还保留的对象">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-11-07T07:05:09.288Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="jvm学习笔记-GC调优">
+<meta name="twitter:description" content="目录：   一、堆内存空间策略   二、GC算法及常见垃圾回收器   三、案例  ParNew时间过长 CMS的时长过长 连续fullgc  一、jvm调优-堆内存jvm调优的关键在于堆内存空间的控制策略。 新生代伊甸园区：新生的小对象，每当使用关键字new的时候默认在此空间进行对象创建。如果创建的对象过多，也可能造成伊甸园区的内存空间占满，此时就会发生晋级操作（多次minorgc执行还保留的对象">
+
+
+  
+
+
+  <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml" />
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/jvm学习笔记-GC调优.html"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>jvm学习笔记-GC调优 | Hexo</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+    
+    
+      
+      
+    
+      
+      
+    
+    
+
+  
+
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+    
+    
+    <div class="post-block page">
+      <header class="post-header">
+
+<h1 class="post-title" itemprop="name headline">jvm学习笔记-GC调优</h1>
+
+<div class="post-meta">
+  
+  
+
+
+
+</div>
+
+</header>
+
+      
+      
+      
+      <div class="post-body">
+        
+        
+          <p>目录：<br>   一、堆内存空间策略<br>   二、GC算法及常见垃圾回收器<br>   三、案例</p>
+<ul>
+<li>ParNew时间过长</li>
+<li>CMS的时长过长</li>
+<li>连续fullgc</li>
+</ul>
+<h2 id="一、jvm调优-堆内存"><a href="#一、jvm调优-堆内存" class="headerlink" title="一、jvm调优-堆内存"></a>一、jvm调优-堆内存</h2><p>jvm调优的关键在于堆内存空间的控制策略。</p>
+<h3 id="新生代"><a href="#新生代" class="headerlink" title="新生代"></a>新生代</h3><p>伊甸园区：新生的小对象，每当使用关键字new的时候默认在此空间进行对象创建。如果创建的对象过多，也可能造成伊甸园区的内存空间占满，此时就会发生晋级操作（多次minorgc执行还保留的对象晋升到存活区）<br>存活区：进行一些gc后保留的对象（程序计数器会记录gc的执行次数）。存活区准备两块空间：s1、s0，有块空间永远是空的，是向老年代晋升。</p>
+<p>###老年代<br>经历了多次gc仍然存活的对象，如果是一个很大的对象，也默认保存到老年代，当老年代空间不足就会进行MajorGC（FUllgc），这样的清理非常耗费性能，这就是为什么不是用system.gc()的原因。</p>
+<p>##二、案例</p>
+<p>###ParNew时间过长</p>
+<p>####1.新生代对象复制耗时长<br>代码示例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">public class JVMTest &#123;</span><br><span class="line">    private static final int _1MB = 1024 * 1024;</span><br><span class="line"></span><br><span class="line">    private byte[] bigSize = new byte[200 * _1MB];</span><br><span class="line">    /**</span><br><span class="line">     * 新生代比较大，并且存活对象多，拷贝时间长</span><br><span class="line">     */</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        //初始化包含20M存储空间的实例</span><br><span class="line">        JVMTest instance = new JVMTest();</span><br><span class="line">        for (int i = 0; i &lt; 500; i++) &#123;</span><br><span class="line">            byte[] bytes = new byte[10 * _1MB];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>jvm参数:<br><code>-verbose:gc -Xms1800M -Xmx1800M -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:SurvivorRatio=1 -XX:NewRatio=1</code></p>
+<p>具体参数解释:<br>-Xms1800M:初始堆大小<br>-Xmx1800M:最大堆大小<br>-XX:SurvivorRatio=1:Eden区与Survivor区的大小比值<br>-XX:NewRatio=1:年轻代(包括Eden和两个Survivor区)与年老代的比值(除去持久代)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">0.343: [GC (Allocation Failure) [PSYoungGen: 299008K-&gt;205232K(614400K)] 299008K-&gt;205240K(1536000K), 0.1469787 secs] [Times: user=0.28 sys=0.08, real=0.15 secs] </span><br><span class="line">0.531: [GC (Allocation Failure) [PSYoungGen: 508210K-&gt;205200K(614400K)] 508218K-&gt;205208K(1536000K), 0.1645153 secs] [Times: user=0.23 sys=0.07, real=0.17 secs] </span><br><span class="line">0.759: [GC (Allocation Failure) [PSYoungGen: 504015K-&gt;205184K(614400K)] 504023K-&gt;205192K(1536000K), 0.0760391 secs] [Times: user=0.17 sys=0.00, real=0.07 secs] </span><br><span class="line">0.890: [GC (Allocation Failure) [PSYoungGen: 508076K-&gt;205168K(614400K)] 508084K-&gt;205176K(1536000K), 0.0502039 secs] [Times: user=0.08 sys=0.00, real=0.05 secs] </span><br><span class="line">0.998: [GC (Allocation Failure) [PSYoungGen: 508092K-&gt;205184K(614400K)] 508100K-&gt;205192K(1536000K), 0.0371529 secs] [Times: user=0.08 sys=0.00, real=0.04 secs] </span><br><span class="line">1.078: [GC (Allocation Failure) [PSYoungGen: 508129K-&gt;205136K(716288K)] 508137K-&gt;205144K(1637888K), 0.2012397 secs] [Times: user=0.19 sys=0.04, real=0.20 secs] </span><br><span class="line">1.369: [GC (Allocation Failure) [PSYoungGen: 706633K-&gt;0K(511488K)] 706641K-&gt;205140K(1433088K), 0.3025980 secs] [Times: user=0.24 sys=0.08, real=0.30 secs] </span><br><span class="line">1.742: [GC (Allocation Failure) [PSYoungGen: 501511K-&gt;0K(619520K)] 706652K-&gt;205140K(1541120K), 0.0015057 secs] [Times: user=0.01 sys=0.01, real=0.00 secs] </span><br><span class="line">1.784: [GC (Allocation Failure) [PSYoungGen: 365614K-&gt;0K(369152K)] 570755K-&gt;205140K(1290752K), 0.0014883 secs] [Times: user=0.00 sys=0.00, real=0.01 secs] </span><br><span class="line">1.845: [GC (Allocation Failure) [PSYoungGen: 365619K-&gt;0K(613376K)] 570760K-&gt;205140K(1534976K), 0.0018317 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] </span><br><span class="line">1.929: [GC (Allocation Failure) [PSYoungGen: 313499K-&gt;0K(322048K)] 518640K-&gt;205140K(1243648K), 0.0016718 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] </span><br><span class="line">1.971: [GC (Allocation Failure) [PSYoungGen: 313500K-&gt;0K(617984K)] 518641K-&gt;205140K(1539584K), 0.0017234 secs] [Times: user=0.01 sys=0.00, real=0.00 secs] </span><br><span class="line">2.014: [GC (Allocation Failure) [PSYoungGen: 313360K-&gt;0K(617984K)] 518501K-&gt;205140K(1539584K), 0.0016901 secs] [Times: user=0.00 sys=0.00, real=0.01 secs] </span><br><span class="line">2.046: [GC (Allocation Failure) [PSYoungGen: 313361K-&gt;0K(626688K)] 518502K-&gt;205140K(1548288K), 0.0014951 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] </span><br><span class="line">2.078: [GC (Allocation Failure) [PSYoungGen: 323833K-&gt;0K(621056K)] 528974K-&gt;205140K(1542656K), 0.0015376 secs] [Times: user=0.01 sys=0.00, real=0.00 secs] </span><br><span class="line">Heap</span><br><span class="line"> PSYoungGen      total 621056K, used 326144K [0x0000000787c00000, 0x00000007c0000000, 0x00000007c0000000)</span><br><span class="line">  eden space 326144K, 100% used [0x0000000787c00000,0x000000079ba80000,0x000000079ba80000)</span><br><span class="line">  from space 294912K, 0% used [0x000000079ba80000,0x000000079ba80000,0x00000007ada80000)</span><br><span class="line">  to   space 287232K, 0% used [0x00000007ae780000,0x00000007ae780000,0x00000007c0000000)</span><br><span class="line"> ParOldGen       total 921600K, used 205140K [0x000000074f800000, 0x0000000787c00000, 0x0000000787c00000)</span><br><span class="line">  object space 921600K, 22% used [0x000000074f800000,0x000000075c055378,0x0000000787c00000)</span><br><span class="line"> Metaspace       used 2651K, capacity 4486K, committed 4864K, reserved 1056768K</span><br><span class="line">  class space    used 287K, capacity 386K, committed 512K, reserved 1048576K</span><br></pre></td></tr></table></figure></p>
+<p>从gc log可以看出，前面7次gc耗时比较长，前面6次对象在Eden区和Survivor区之间拷贝，第7次对象从survivor区拷贝到old区，因存活对象比较大，导致拷贝耗时比较长</p>
+<p>修改方案:<br>增大eden区内存大小，不指定SurvivorRatio大小，默认为8<br>jvm参数:<br><code>-verbose:gc -Xms1800M -Xmx1800M -XX:+PrintGCDetails -XX:+PrintGCTimeStamps</code><br>运行结果:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">0.907: [GC (Allocation Failure) [PSYoungGen: 458752K-&gt;464K(537600K)] 458752K-&gt;205272K(1766400K), 0.3606033 secs] [Times: user=0.48 sys=0.11, real=0.36 secs] </span><br><span class="line">1.395: [GC (Allocation Failure) [PSYoungGen: 460055K-&gt;448K(537600K)] 664863K-&gt;205256K(1766400K), 0.0019146 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] </span><br><span class="line">1.468: [GC (Allocation Failure) [PSYoungGen: 458949K-&gt;368K(537600K)] 663757K-&gt;205176K(1766400K), 0.0014336 secs] [Times: user=0.01 sys=0.00, real=0.00 secs] </span><br><span class="line">1.555: [GC (Allocation Failure) [PSYoungGen: 459853K-&gt;368K(537600K)] 664661K-&gt;205176K(1766400K), 0.0018559 secs] [Times: user=0.01 sys=0.00, real=0.00 secs] </span><br><span class="line">1.628: [GC (Allocation Failure) [PSYoungGen: 459892K-&gt;368K(537600K)] 664700K-&gt;205176K(1766400K), 0.0017802 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] </span><br><span class="line">1.758: [GC (Allocation Failure) [PSYoungGen: 459918K-&gt;368K(613888K)] 664726K-&gt;205176K(1842688K), 0.0041434 secs] [Times: user=0.01 sys=0.00, real=0.01 secs] </span><br><span class="line">2.247: [GC (Allocation Failure) [PSYoungGen: 606276K-&gt;0K(613888K)] 811084K-&gt;205152K(1842688K), 0.0023534 secs] [Times: user=0.01 sys=0.00, real=0.00 secs] </span><br><span class="line">2.434: [GC (Allocation Failure) [PSYoungGen: 605921K-&gt;0K(612864K)] 811073K-&gt;205152K(1841664K), 0.0116751 secs] [Times: user=0.00 sys=0.00, real=0.01 secs] </span><br><span class="line">2.635: [GC (Allocation Failure) [PSYoungGen: 605982K-&gt;0K(613376K)] 811134K-&gt;205152K(1842176K), 0.0022430 secs] [Times: user=0.01 sys=0.00, real=0.00 secs] </span><br><span class="line">2.761: [GC (Allocation Failure) [PSYoungGen: 606034K-&gt;0K(613376K)] 811186K-&gt;205152K(1842176K), 0.0022078 secs] [Times: user=0.01 sys=0.00, real=0.00 secs] </span><br><span class="line">Heap</span><br><span class="line"> PSYoungGen      total 613376K, used 239434K [0x000000079a800000, 0x00000007c0000000, 0x00000007c0000000)</span><br><span class="line">  eden space 612352K, 39% used [0x000000079a800000,0x00000007a91d2ac8,0x00000007bfe00000)</span><br><span class="line">  from space 1024K, 0% used [0x00000007bff00000,0x00000007bff00000,0x00000007c0000000)</span><br><span class="line">  to   space 1024K, 0% used [0x00000007bfe00000,0x00000007bfe00000,0x00000007bff00000)</span><br><span class="line"> ParOldGen       total 1228800K, used 205152K [0x000000074f800000, 0x000000079a800000, 0x000000079a800000)</span><br><span class="line">  object space 1228800K, 16% used [0x000000074f800000,0x000000075c058060,0x000000079a800000)</span><br><span class="line"> Metaspace       used 2651K, capacity 4486K, committed 4864K, reserved 1056768K</span><br><span class="line">  class space    used 287K, capacity 386K, committed 512K, reserved 1048576K</span><br></pre></td></tr></table></figure></p>
+<p>####2.老年代对象多，OopMap比较大，GC Roots mark时间久<br>代码示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">    private static final int _1MB = 1024 * 1024;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * -verbose:gc -Xms1800M -Xmx1800M -XX:NewRatio=4 -XX:+PrintGCDetails -XX:+PrintGCTimeStamps</span><br><span class="line">     * 老年代对象多，OopMap比较大，GC Roots mark时间久</span><br><span class="line">     */</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        //初始化包含40MB个对象的List</span><br><span class="line">        int count = 40 * _1MB;</span><br><span class="line">        List&lt;JVMTest&gt; list = new ArrayList&lt;&gt;(count);</span><br><span class="line">        for (int i = 0; i &lt; count; i++) &#123;</span><br><span class="line">            list.add(new JVMTest());</span><br><span class="line">        &#125;</span><br><span class="line">        for (int i = 0; i &lt; 500; i++) &#123;</span><br><span class="line">            //设置较大对象，防止对象拷贝，直接gc掉</span><br><span class="line">            byte[] bytes = new byte[10 * _1MB];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>jvm参数：<br><code>-verbose:gc -Xms1800M -Xmx1800M -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:NewRatio=4</code><br>运行结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">0.483: [GC (Allocation Failure) [PSYoungGen: 276480K-&gt;46048K(322560K)] 276480K-&gt;434616K(1797120K), 0.9302583 secs] [Times: user=1.55 sys=0.23, real=0.93 secs] </span><br><span class="line">1.565: [GC (Allocation Failure) [PSYoungGen: 322528K-&gt;46064K(322560K)] 711096K-&gt;711648K(1797120K), 1.6081444 secs] [Times: user=3.54 sys=0.25, real=1.61 secs] </span><br><span class="line">3.268: [GC (Allocation Failure) [PSYoungGen: 320746K-&gt;46064K(322560K)] 986330K-&gt;984648K(1797120K), 1.3692521 secs] [Times: user=4.67 sys=0.21, real=1.36 secs] </span><br><span class="line">4.660: [GC (Allocation Failure) [PSYoungGen: 317771K-&gt;46064K(322560K)] 1256356K-&gt;984688K(1797120K), 0.1991782 secs] [Times: user=0.75 sys=0.01, real=0.20 secs] </span><br><span class="line">4.880: [GC (Allocation Failure) [PSYoungGen: 317705K-&gt;46064K(322560K)] 1256329K-&gt;984688K(1797120K), 0.1958096 secs] [Times: user=0.74 sys=0.00, real=0.19 secs] </span><br><span class="line">5.102: [GC (Allocation Failure) [PSYoungGen: 317711K-&gt;46064K(168960K)] 1256335K-&gt;984720K(1643520K), 0.2009680 secs] [Times: user=0.73 sys=0.01, real=0.20 secs] </span><br><span class="line">5.312: [GC (Allocation Failure) [PSYoungGen: 161109K-&gt;32064K(245760K)] 1099765K-&gt;984788K(1720320K), 0.2138892 secs] [Times: user=0.78 sys=0.01, real=0.21 secs] </span><br><span class="line">5.536: [GC (Allocation Failure) [PSYoungGen: 147109K-&gt;0K(245760K)] 1099834K-&gt;984756K(1720320K), 0.1657299 secs] [Times: user=0.61 sys=0.02, real=0.17 secs] </span><br><span class="line">5.711: [GC (Allocation Failure) [PSYoungGen: 115045K-&gt;0K(245760K)] 1099802K-&gt;984756K(1720320K), 0.0428948 secs] [Times: user=0.15 sys=0.00, real=0.04 secs] </span><br><span class="line">5.763: [GC (Allocation Failure) [PSYoungGen: 115046K-&gt;0K(245760K)] 1099802K-&gt;984756K(1720320K), 0.0385329 secs] [Times: user=0.15 sys=0.00, real=0.04 secs] </span><br><span class="line">5.811: [GC (Allocation Failure) [PSYoungGen: 115046K-&gt;0K(245760K)] 1099803K-&gt;984756K(1720320K), 0.0410349 secs] [Times: user=0.15 sys=0.00, real=0.04 secs] </span><br><span class="line">5.862: [GC (Allocation Failure) [PSYoungGen: 115046K-&gt;0K(245760K)] 1099803K-&gt;984756K(1720320K), 0.0413397 secs] [Times: user=0.15 sys=0.00, real=0.04 secs] </span><br><span class="line">5.912: [GC (Allocation Failure) [PSYoungGen: 115046K-&gt;0K(245760K)] 1099803K-&gt;984756K(1720320K), 0.0384348 secs] [Times: user=0.15 sys=0.00, real=0.04 secs] </span><br><span class="line">5.960: [GC (Allocation Failure) [PSYoungGen: 115046K-&gt;0K(245760K)] 1099803K-&gt;984756K(1720320K), 0.0566619 secs] [Times: user=0.14 sys=0.01, real=0.05 secs] </span><br><span class="line">6.029: [GC (Allocation Failure) [PSYoungGen: 115046K-&gt;0K(245760K)] 1099803K-&gt;984756K(1720320K), 0.0390638 secs] [Times: user=0.16 sys=0.00, real=0.04 secs] </span><br><span class="line">6.077: [GC (Allocation Failure) [PSYoungGen: 115046K-&gt;0K(245760K)] 1099803K-&gt;984756K(1720320K), 0.0387515 secs] [Times: user=0.16 sys=0.00, real=0.04 secs] </span><br><span class="line">6.125: [GC (Allocation Failure) [PSYoungGen: 115046K-&gt;0K(245760K)] 1099803K-&gt;984756K(1720320K), 0.0395350 secs] [Times: user=0.16 sys=0.00, real=0.04 secs] </span><br><span class="line">6.175: [GC (Allocation Failure) [PSYoungGen: 115046K-&gt;0K(245760K)] 1099803K-&gt;984756K(1720320K), 0.0427555 secs] [Times: user=0.15 sys=0.00, real=0.05 secs] </span><br><span class="line">6.227: [GC (Allocation Failure) [PSYoungGen: 115046K-&gt;0K(245760K)] 1099803K-&gt;984756K(1720320K), 0.0383088 secs] [Times: user=0.15 sys=0.00, real=0.04 secs] </span><br><span class="line">6.275: [GC (Allocation Failure) [PSYoungGen: 115046K-&gt;0K(245760K)] 1099803K-&gt;984756K(1720320K), 0.0386607 secs] [Times: user=0.15 sys=0.00, real=0.04 secs] </span><br><span class="line">6.323: [GC (Allocation Failure) [PSYoungGen: 115046K-&gt;0K(245760K)] 1099803K-&gt;984756K(1720320K), 0.0392022 secs] [Times: user=0.15 sys=0.00, real=0.04 secs] </span><br><span class="line">6.372: [GC (Allocation Failure) [PSYoungGen: 115046K-&gt;0K(245760K)] 1099803K-&gt;984756K(1720320K), 0.0401094 secs] [Times: user=0.14 sys=0.00, real=0.04 secs] </span><br><span class="line">6.425: [GC (Allocation Failure) [PSYoungGen: 115046K-&gt;0K(245760K)] 1099803K-&gt;984756K(1720320K), 0.0394882 secs] [Times: user=0.15 sys=0.00, real=0.04 secs] </span><br><span class="line">6.484: [GC (Allocation Failure) [PSYoungGen: 115046K-&gt;0K(245760K)] 1099803K-&gt;984756K(1720320K), 0.0417665 secs] [Times: user=0.16 sys=0.01, real=0.04 secs] </span><br><span class="line">6.535: [GC (Allocation Failure) [PSYoungGen: 115046K-&gt;0K(245760K)] 1099803K-&gt;984756K(1720320K), 0.0397025 secs] [Times: user=0.14 sys=0.00, real=0.04 secs] </span><br><span class="line">6.585: [GC (Allocation Failure) [PSYoungGen: 115046K-&gt;0K(245760K)] 1099803K-&gt;984756K(1720320K), 0.0424433 secs] [Times: user=0.16 sys=0.00, real=0.05 secs] </span><br><span class="line">6.637: [GC (Allocation Failure) [PSYoungGen: 115046K-&gt;0K(245760K)] 1099803K-&gt;984756K(1720320K), 0.0393615 secs] [Times: user=0.15 sys=0.00, real=0.04 secs] </span><br><span class="line">6.685: [GC (Allocation Failure) [PSYoungGen: 115046K-&gt;0K(245760K)] 1099803K-&gt;984756K(1720320K), 0.0382109 secs] [Times: user=0.15 sys=0.00, real=0.04 secs] </span><br><span class="line">6.732: [GC (Allocation Failure) [PSYoungGen: 115046K-&gt;0K(245760K)] 1099803K-&gt;984756K(1720320K), 0.0389908 secs] [Times: user=0.15 sys=0.00, real=0.04 secs] </span><br><span class="line">6.781: [GC (Allocation Failure) [PSYoungGen: 115046K-&gt;0K(245760K)] 1099803K-&gt;984756K(1720320K), 0.0437354 secs] [Times: user=0.14 sys=0.00, real=0.04 secs] </span><br><span class="line">6.838: [GC (Allocation Failure) [PSYoungGen: 115046K-&gt;0K(245760K)] 1099803K-&gt;984756K(1720320K), 0.0551020 secs] [Times: user=0.11 sys=0.00, real=0.05 secs] </span><br><span class="line">6.906: [GC (Allocation Failure) [PSYoungGen: 115046K-&gt;0K(245760K)] 1099803K-&gt;984756K(1720320K), 0.0548790 secs] [Times: user=0.11 sys=0.00, real=0.06 secs] </span><br><span class="line">6.986: [GC (Allocation Failure) [PSYoungGen: 115046K-&gt;0K(245760K)] 1099803K-&gt;984756K(1720320K), 0.0600468 secs] [Times: user=0.13 sys=0.01, real=0.06 secs] </span><br><span class="line">7.060: [GC (Allocation Failure) [PSYoungGen: 115046K-&gt;0K(255488K)] 1099803K-&gt;984756K(1730048K), 0.0393154 secs] [Times: user=0.15 sys=0.00, real=0.04 secs] </span><br><span class="line">7.109: [GC (Allocation Failure) [PSYoungGen: 125496K-&gt;0K(246784K)] 1110253K-&gt;984756K(1721344K), 0.0397567 secs] [Times: user=0.15 sys=0.00, real=0.04 secs] </span><br><span class="line">7.159: [GC (Allocation Failure) [PSYoungGen: 125496K-&gt;0K(272384K)] 1110253K-&gt;984756K(1746944K), 0.0424679 secs] [Times: user=0.13 sys=0.00, real=0.04 secs] </span><br><span class="line">7.225: [GC (Allocation Failure) [PSYoungGen: 167128K-&gt;0K(264192K)] 1151885K-&gt;984756K(1738752K), 0.0414923 secs] [Times: user=0.14 sys=0.00, real=0.04 secs] </span><br><span class="line">7.280: [GC (Allocation Failure) [PSYoungGen: 167130K-&gt;0K(286720K)] 1151887K-&gt;984756K(1761280K), 0.0404848 secs] [Times: user=0.15 sys=0.00, real=0.04 secs] </span><br><span class="line">7.335: [GC (Allocation Failure) [PSYoungGen: 188193K-&gt;0K(279552K)] 1172950K-&gt;984756K(1754112K), 0.0393341 secs] [Times: user=0.15 sys=0.00, real=0.04 secs] </span><br><span class="line">7.389: [GC (Allocation Failure) [PSYoungGen: 188192K-&gt;0K(299008K)] 1172949K-&gt;984756K(1773568K), 0.0399307 secs] [Times: user=0.14 sys=0.00, real=0.04 secs] </span><br><span class="line">7.452: [GC (Allocation Failure) [PSYoungGen: 219413K-&gt;0K(292864K)] 1204170K-&gt;984756K(1767424K), 0.0517411 secs] [Times: user=0.18 sys=0.01, real=0.05 secs] </span><br><span class="line">Heap</span><br><span class="line"> PSYoungGen      total 292864K, used 14705K [0x00000007a9800000, 0x00000007c0000000, 0x00000007c0000000)</span><br><span class="line">  eden space 223232K, 6% used [0x00000007a9800000,0x00000007aa65c410,0x00000007b7200000)</span><br><span class="line">  from space 69632K, 0% used [0x00000007b7200000,0x00000007b7200000,0x00000007bb600000)</span><br><span class="line">  to   space 64512K, 0% used [0x00000007bc100000,0x00000007bc100000,0x00000007c0000000)</span><br><span class="line"> ParOldGen       total 1474560K, used 984756K [0x000000074f800000, 0x00000007a9800000, 0x00000007a9800000)</span><br><span class="line">  object space 1474560K, 66% used [0x000000074f800000,0x000000078b9ad388,0x00000007a9800000)</span><br><span class="line"> Metaspace       used 2655K, capacity 4486K, committed 4864K, reserved 1056768K</span><br><span class="line">  class space    used 287K, capacity 386K, committed 512K, reserved 1048576K</span><br></pre></td></tr></table></figure></p>
+<p>解决方案：降低long区对象</p>
+<p>##ops-activity fullgc排查记录</p>
+<ol>
+<li>发现vesta监控，fullgc频繁，半个小时一次</li>
+<li>登陆经常报警的机器，查看内存分配和gc情况<br>其中我们发现-Xmn（年轻代）大小为1G，JVM最大可用内存是4G；元数据区使用比例占到了94.7%，老年代区的增长速度较快</li>
+<li>执行./jmap -histo 7075命令，获取内存占用直方图；可以看到Long([J)占用了极大的内存，其次是Object对象</li>
+<li>打开看Long类型的实例数，我们发现有很多Histogram的实例，里面的值大部分是0；这些Histogram主要是在metrics绘制曲线图时要用到的数据采集点；目前该服务引用了将近38个服务（见下图网络拓扑图），每个服务假设有2-3个client，每个client大概有10-20个API，那大概有2280个数据采集对象；这些对象占用了大量的内存，而且结合FGC后的Histogram对比发现没有及时被GC掉，导致进入老年代，然后老年代会快速增长。原因是base-server给的问题答复是目前我们所有引用的client API都会启动一个commandKey来做数据统计，虽然有很多API我们是没用到的但是也会占用一段内存去做数据采集</li>
+<li>打开Object类的实例数，我们发现有很多com.datastax.driver.core.Metadata实例，这些类目前是在cassandra中用到；在和cassandra负责人沟通后，目前cassandra的session会存在大量重复创建的问题，而且26号报警多次就是因为DBA更改key space导致的 ，cassandra客户端会更新整个集群的原信息，这个过程会产生几百M的新生代内存，如果当前年老区增长频繁，会恶化FULLGC的频率。<br>解决方案</li>
+<li><p>应用目前依赖服务过多，占用内存过大，急需要申请高配机器以做暂时解决方案（稳健方案）高配机器8G内存，有标准的启动参数，本来想先升级其中的一台机器，对单独的一台机器做配配套的JVM启动内存分配参数，但是目前发布系统不支持，所以如果采用该方案，就需要对所有应用机器统一升级；</p>
+</li>
+<li><p>解决Histogram实例过多的问题<br>有两个选择：<br>a. 升级base版本到内测版本（0.2.3-SNAPSHOT），不过因为不是发布版本，所以有一定风险；<br>b. 将目前我们依赖的所有服务的client或api都复制一份到本地，但是只复制用到的API接口，该方案比较激进，改动也非常大；</p>
+</li>
+<li><p>解决cassendra com.datastax.driver.core.Metadata$TokenMap占用过多内存的问题在和cassendra负责人沟通后，他表示我们目前ops-activity的实现没有问题，可能后面会需要升级一个中间件版本，但是还是不能解决占用内存过多的问题；</p>
+<h2 id="EXCEL导入导致full-gc-JVM优化"><a href="#EXCEL导入导致full-gc-JVM优化" class="headerlink" title="EXCEL导入导致full gc JVM优化"></a>EXCEL导入导致full gc JVM优化</h2><p>之前使用POI的usermodel方式导入excel，在线上发现每次导入模版都会发生full gc告警，并且在导入速度慢，影响业务。<br>POI官网提到XSSF读写excel的三种方式，<br>1、eventmodel方式，基于事件驱动,SAX的方式解析excel（.xlsx是基于OOXML的），CPU和内存消耗非常低，但是只能读不能写<br>2、usermodel，就是我们一般使用的方式，这种方式可以读可以写，但是CPU和内存消耗非常大<br>3、SXSSF，POI3.8以后开始支持，这种方式只能写excel</p>
+</li>
+</ol>
+<p>在使用eventmodel后，使用相同的测试数据发现没有出现gc情况，并且时间减少了一半么，大大提高了效率。不会再出现full gc问题，minor gc的次数会比较频繁，因为使用IO流读取会不断的产生对象导致的。<br>优化： 在插入元数据时是一条条插入sql，这里可以使用线程池去并发插入，优化时间。</p>
+<p>总结策略就是： 对象先在eden上分配，如果eden和s1满了，将存活对象都复制到s2中，再回收。大的数组对象直接进入老年代 </p>
+<p>对象优先在Eden分配<br>大对象直接进老年代<br>长期存活的对象将进入老年代<br>动态对象进行年龄判定再分代</p>
+<p>S0和S1是survivor空间的使用，E表示Eden的空间，O表示老年代，P表示持久带 YGC是minor gc的次数，FGC表示FGC的次数 T表示时间</p>
+
+        
+      </div>
+      
+      
+      
+    </div>
+    
+
+
+
+    
+    
+    
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">mireyazzz</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-name">tags</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、jvm调优-堆内存"><span class="nav-number">1.</span> <span class="nav-text">一、jvm调优-堆内存</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#新生代"><span class="nav-number">1.1.</span> <span class="nav-text">新生代</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EXCEL导入导致full-gc-JVM优化"><span class="nav-number">2.</span> <span class="nav-text">EXCEL导入导致full gc JVM优化</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright"> &copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">mireyazzz</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Muse</a> v6.5.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.5.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.5.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.5.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
