@@ -120,9 +120,9 @@
 <meta property="og:image" content="http://yoursite.com/2018/10/24/jvm学习笔记-原理篇/Slide5.png">
 <meta property="og:image" content="https://img.alicdn.com/tfs/TB1EVhqRFXXXXcFXFXXXXXXXXXX-583-183.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/24/jvm学习笔记-原理篇/Fullgc的触发场景.png">
-<meta property="og:image" content="https://images2015.cnblogs.com/blog/584866/201704/584866-20170426154633834-741444326.jpg">
-<meta property="og:image" content="https://images0.cnblogs.com/blog/610052/201409/131449151064177.png">
-<meta property="og:updated_time" content="2018-11-16T11:00:08.448Z">
+<meta property="og:image" content="http://yoursite.com/2018/10/24/jvm学习笔记-原理篇/metaspace.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/24/jvm学习笔记-原理篇/stack.png">
+<meta property="og:updated_time" content="2018-11-16T11:06:55.728Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="jvm学习笔记-原理篇">
 <meta name="twitter:description" content="参考文档：https://www.oracle.com/webfolder/technetwork/tutorials/obe/java/gc01/index.htmlhttps://blog.csdn.net/hellozhxy/article/details/80649342 一、jvm内存结构 1. heap堆堆是内存管理里最大的一块，是线程共享的数据。在jvm启动时创建。目的是存放对象实例">
@@ -367,7 +367,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2018-11-16 19:00:08" itemprop="dateModified" datetime="2018-11-16T19:00:08+08:00">2018-11-16</time>
+                <time title="Modified: 2018-11-16 19:06:55" itemprop="dateModified" datetime="2018-11-16T19:06:55+08:00">2018-11-16</time>
               
             
           </span>
@@ -431,8 +431,8 @@
 <p>当老年代也满了装不下的时候，就会抛出OOM（Out of Memory）异常。<br>MajorGC也会触发STW，STW的时间取决于老年代垃圾收集器的种类。</p>
 <h5 id="FullGC"><a href="#FullGC" class="headerlink" title="FullGC"></a>FullGC</h5><p>full gc清理整个堆空间<br><img src="/2018/10/24/jvm学习笔记-原理篇/Fullgc的触发场景.png" alt=""></p>
 <h3 id="2-方法区（永久代）"><a href="#2-方法区（永久代）" class="headerlink" title="2. 方法区（永久代）"></a>2. 方法区（永久代）</h3><p>方法区逻辑上属于堆的一部分，但是为了与堆进行区分，通常又叫“非堆”。方法区又称为永久代，线程共享，目的是存放已被jvm加载的类信息，常量，静态变量，即时编译器编译后的代码等数据，垃圾回收在这个区域比较少，主要目的是对常量池的回收和类的卸载。</p>
-<h4 id="运行时常量池"><a href="#运行时常量池" class="headerlink" title="运行时常量池"></a>运行时常量池</h4><p>运行时常量池是方法区的一部分，用于存储编译器产生的字面量和符号引用，这类内容类加载后被存储到方法区的rcp。<br>在JDK8中废弃了永久代，替换为Metaspace(本地内存中)<br><img src="https://images2015.cnblogs.com/blog/584866/201704/584866-20170426154633834-741444326.jpg" alt=""></p>
-<h3 id="3-JVM-Stack"><a href="#3-JVM-Stack" class="headerlink" title="3. JVM Stack"></a>3. JVM Stack</h3><p>JVM栈是线程私有的，它的生命周期与线程相同。JVM栈描述的是java方法执行的内存模型，每个方法在执行的同时都会创建一个栈帧，用于存储局部变量表、操作数栈、动态链接、方法出口等信息。每个方法从调用直至执行完成的过程，就对应着一个栈帧在虚拟机栈中入栈到出栈的过程。<br>局部变量表中存放了编译期可知的各种<strong>基本数据类型</strong>（boolean、byte、char、short、int、float、long、double）、对象的<strong>引用类型</strong>（reference类型，不等同于对象本身，根据不同的虚拟机实现，可能是一个指向对象起始地址的引用指针，也可能是一个代表对象的句柄或者其他与对象相关的位置）。局部变量表中需要的内存空间在编译期间完成分配，当进入一个方法时，这个方法需要在帧中分配多大的局部变量空间是完全确定的，在方法运行期间不会改变局部变量表的大小。<br><img src="https://images0.cnblogs.com/blog/610052/201409/131449151064177.png" alt=""></p>
+<h4 id="运行时常量池"><a href="#运行时常量池" class="headerlink" title="运行时常量池"></a>运行时常量池</h4><p>运行时常量池是方法区的一部分，用于存储编译器产生的字面量和符号引用，这类内容类加载后被存储到方法区的rcp。<br>在JDK8中废弃了永久代，替换为Metaspace(本地内存中)<br><img src="/2018/10/24/jvm学习笔记-原理篇/metaspace.png" alt=""></p>
+<h3 id="3-JVM-Stack"><a href="#3-JVM-Stack" class="headerlink" title="3. JVM Stack"></a>3. JVM Stack</h3><p>JVM栈是线程私有的，它的生命周期与线程相同。JVM栈描述的是java方法执行的内存模型，每个方法在执行的同时都会创建一个栈帧，用于存储局部变量表、操作数栈、动态链接、方法出口等信息。每个方法从调用直至执行完成的过程，就对应着一个栈帧在虚拟机栈中入栈到出栈的过程。<br>局部变量表中存放了编译期可知的各种<strong>基本数据类型</strong>（boolean、byte、char、short、int、float、long、double）、对象的<strong>引用类型</strong>（reference类型，不等同于对象本身，根据不同的虚拟机实现，可能是一个指向对象起始地址的引用指针，也可能是一个代表对象的句柄或者其他与对象相关的位置）。局部变量表中需要的内存空间在编译期间完成分配，当进入一个方法时，这个方法需要在帧中分配多大的局部变量空间是完全确定的，在方法运行期间不会改变局部变量表的大小。<br><img src="/2018/10/24/jvm学习笔记-原理篇/stack.png" alt=""></p>
 <h3 id="4-本地方法栈"><a href="#4-本地方法栈" class="headerlink" title="4. 本地方法栈"></a>4. 本地方法栈</h3><p>与VM Strack相似，VM Strack为JVM提供执行JAVA方法的服务，Native Method Stack则为JVM提供使用native 方法的服务。</p>
 <h3 id="5-程序计数器"><a href="#5-程序计数器" class="headerlink" title="5. 程序计数器"></a>5. 程序计数器</h3><p>程序计数器是一块较小的内存区域，作用可以看做是当前线程执行的字节码的位置指示器。分支、循环、跳转、异常处理和线程恢复等基础功能都需要依赖这个计算器来完成</p>
 <h2 id="二、Java-类加载机制"><a href="#二、Java-类加载机制" class="headerlink" title="二、Java 类加载机制"></a>二、Java 类加载机制</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">加载</span><br><span class="line">⬇️</span><br><span class="line">验证➡️准备➡️解析</span><br><span class="line">           ⬇️</span><br><span class="line">           初始化</span><br><span class="line">           ⬇️</span><br><span class="line">           使用</span><br><span class="line">           ⬇️</span><br><span class="line">           卸载</span><br></pre></td></tr></table></figure>
